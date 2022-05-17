@@ -1,0 +1,13 @@
+:host {
+	width: 200px;
+	height: 32px;
+	border: 1px solid red;
+	background-color: aqua;
+	border-radius: 12px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: grab;
+	user-select: none;
+	position: absolute;
+}

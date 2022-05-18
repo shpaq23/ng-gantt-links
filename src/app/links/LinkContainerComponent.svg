@@ -1,3 +1,3 @@
 <svg xmlns="http://www.w3.org/2000/svg">
-	<polyline *ngFor="let link of links; trackBy: trackByFn;" appLink [link]="link"></polyline>
+	<path *ngFor="let link of links; trackBy: trackByFn;" appLink [link]="link"></path>
 </svg>

@@ -8,7 +8,7 @@ import { calcSS } from 'src/app/links/calculations/ss';
 import { calcES } from 'src/app/links/calculations/es';
 
 @Directive({
-	selector: 'polyline[appLink]'
+	selector: 'path[appLink]'
 })
 export class LinkDirective implements OnChanges {
 
@@ -26,7 +26,7 @@ export class LinkDirective implements OnChanges {
 	}
 
 	private setPoints(): void {
-		this.renderer.setAttribute(this.elementRef.nativeElement, 'points', this.calculatePoints());
+		this.renderer.setAttribute(this.elementRef.nativeElement, 'd', this.calculatePoints());
 		this.renderer.setAttribute(this.elementRef.nativeElement, 'style', 'fill:white;stroke:red;stroke-width:4');
 	}
 
@@ -55,7 +55,7 @@ export class LinkDirective implements OnChanges {
 	}
 
 	private pointsToAttribute(points: Point[]): string {
-		return points.map(point => `${point.x},${point.y}`).join(' ')
+		return points.map((point, i) => `${i? 'L' : 'M'}${point.x},${point.y}`).join(' ');
 	}
 }
 

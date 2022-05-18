@@ -8,7 +8,9 @@ export class Link {
 		private readonly type: LinkType,
 		private readonly start: LinkEndpoint,
 		private readonly end: LinkEndpoint,
-		private readonly layout: number
+		private readonly layout: number,
+		public readonly xMargin: number = 20,
+		public readonly yMargin: number = 25,
 	) {
 	}
 

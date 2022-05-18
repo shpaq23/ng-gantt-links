@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Link } from 'src/app/links/model/Link';
-import { LinkType } from 'src/app/links/model/LinkType';
+import { LinkAnchor, LinkType } from 'src/app/links/model/LinkType';
 import { LinkEndpoint } from 'src/app/links/model/LinkEndpoint';
 
 @Component({
@@ -133,11 +133,11 @@ export class AppComponent implements OnInit {
 
 	private createLink(bar1: DOMRect, bar2: DOMRect, type: LinkType, id: number): Link {
 		const linkStart: LinkEndpoint = {
-			x: bar1.x + bar1.width,
+			x: (type.start === LinkAnchor.START) ? bar1.x : bar1.x + bar1.width,
 			y: bar1.y
 		};
 		const linkEnd: LinkEndpoint = {
-			x: bar2.x + bar2.width,
+			x: (type.end === LinkAnchor.END) ? bar2.x + bar2.width : bar2.x,
 			y: bar2.y
 		};
 		return new Link(id, type, linkStart, linkEnd, 34);

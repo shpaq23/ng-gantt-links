@@ -1,0 +1,24 @@
+<app-link-container [links]="links"></app-link-container>
+<div style="position: relative; height: 150px;">
+	<p>Link type: End-End</p>
+	<app-bar #bar1 (positionChanged)="onBar1PositionChanged($event)" summary="Bar 1 - EE" [y]="12"></app-bar>
+	<app-bar #bar2 (positionChanged)="onBar2PositionChanged($event)" summary="Bar 2 - EE" [y]="80"></app-bar>
+</div>
+
+<div style="position: relative; height: 150px;">
+	<p>Link type: End-Start</p>
+	<app-bar #bar3 (positionChanged)="onBar3PositionChanged($event)" summary="Bar 3 - ES" [y]="12"></app-bar>
+	<app-bar #bar4 (positionChanged)="onBar4PositionChanged($event)" summary="Bar 4 - ES" [y]="80"></app-bar>
+</div>
+
+<div style="position: relative; height: 150px;">
+	<p>Link type: Start-End</p>
+	<app-bar #bar5 (positionChanged)="onBar5PositionChanged($event)" summary="Bar 5 - SE" [y]="12"></app-bar>
+	<app-bar #bar6 (positionChanged)="onBar6PositionChanged($event)" summary="Bar 6 - SE" [y]="80"></app-bar>
+</div>
+
+<div style="position: relative; height: 150px;">
+	<p>Link type: Start-Start</p>
+	<app-bar #bar7 (positionChanged)="onBar7PositionChanged($event)" summary="Bar 7 - SS" [y]="12"></app-bar>
+	<app-bar #bar8 (positionChanged)="onBar8PositionChanged($event)" summary="Bar 8 - SS" [y]="80"></app-bar>
+</div>

@@ -1,13 +1,37 @@
 :host {
-	width: 200px;
-	height: 32px;
-	border: 1px solid red;
-	background-color: aqua;
-	border-radius: 12px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	cursor: grab;
-	user-select: none;
 	position: absolute;
+	display: block;
+}
+
+.bar {
+	&__wrapper {
+		width: 200px;
+		height: 32px;
+		outline: 1px solid red;
+		background-color: aqua;
+		border-radius: 12px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		cursor: grab;
+		user-select: none;
+	}
+
+	&__endpoint {
+		position: absolute;
+		top: 50%;
+		width: 16px;
+		height: 16px;
+		border-radius: 50%;
+		background-color: lightgrey;
+		transform: translateY(-50%);
+
+		&--left {
+			left: -24px;
+		}
+
+		&--right {
+			right: -24px;
+		}
+	}
 }

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, NgZone, OnInit, Output, Renderer2 } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, NgZone, Output, Renderer2, ViewChild } from '@angular/core';
 import { animationFrameScheduler, fromEvent } from 'rxjs';
 import { switchMap, takeUntil, throttleTime } from 'rxjs/operators';
 
@@ -8,7 +8,10 @@ import { switchMap, takeUntil, throttleTime } from 'rxjs/operators';
 	styleUrls: ['./BarComponent.scss'],
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class BarComponent implements OnInit {
+export class BarComponent implements AfterViewInit {
+
+	@ViewChild('wrapper')
+	wrapperElement: ElementRef;
 
 	@Input()
 	summary: string;
@@ -26,13 +29,13 @@ export class BarComponent implements OnInit {
 	) {
 	}
 
-	ngOnInit() {
+	ngAfterViewInit() {
 		this.setPosition(0);
 		this.ngZone.runOutsideAngular(() => this.dragAndDrop());
 	}
 
 	private dragAndDrop(): void {
-		fromEvent<MouseEvent>(this.elementRef.nativeElement, 'mousedown')
+		fromEvent<MouseEvent>(this.wrapperElement.nativeElement, 'mousedown')
 			.pipe(
 				switchMap(() => {
 					return fromEvent<MouseEvent>(document, 'mousemove')

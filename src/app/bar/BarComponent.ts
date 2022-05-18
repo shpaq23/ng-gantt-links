@@ -1,6 +1,21 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, NgZone, Output, Renderer2, ViewChild } from '@angular/core';
+import {
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	Component,
+	ElementRef,
+	EventEmitter,
+	Input,
+	NgZone,
+	OnChanges,
+	Output,
+	Renderer2,
+	SimpleChanges,
+	ViewChild
+} from '@angular/core';
 import { animationFrameScheduler, fromEvent } from 'rxjs';
 import { switchMap, takeUntil, throttleTime } from 'rxjs/operators';
+import { LinkDragData } from 'src/app/link-dnd/LinkDragData';
+import { LinkAnchor } from 'src/app/links/model/LinkType';
 
 @Component({
 	selector: 'app-bar',
@@ -8,7 +23,7 @@ import { switchMap, takeUntil, throttleTime } from 'rxjs/operators';
 	styleUrls: ['./BarComponent.scss'],
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class BarComponent implements AfterViewInit {
+export class BarComponent implements OnChanges, AfterViewInit {
 
 	@ViewChild('wrapper')
 	wrapperElement: ElementRef;
@@ -19,14 +34,29 @@ export class BarComponent implements AfterViewInit {
 	@Input()
 	y: number = 0;
 
+	@Input()
+	id: number;
+
 	@Output()
 	positionChanged = new EventEmitter<DOMRect>();
+
+	linkDragStartData: LinkDragData;
+	linkDragEndData: LinkDragData;
+
+	readonly LinkAnchor = LinkAnchor;
 
 	constructor(
 		private readonly elementRef: ElementRef,
 		private readonly renderer2: Renderer2,
 		private readonly ngZone: NgZone
 	) {
+	}
+
+	ngOnChanges(changes: SimpleChanges) {
+		if (changes.id && changes.id.currentValue) {
+			this.linkDragStartData = new LinkDragData<number>(this.id, LinkAnchor.START);
+			this.linkDragEndData = new LinkDragData<number>(this.id, LinkAnchor.END);
+		}
 	}
 
 	ngAfterViewInit() {

@@ -1,2 +1,5 @@
 <app-link-container [links]="links" (linkRendered)="onLinkRendered()"></app-link-container>
-<app-bar *ngFor="let bar of bars" [summary]="bar.summary" [y]="bar.y"></app-bar>
+<app-bar *ngFor="let bar of bars"
+		 [id]="bar.id"
+		 [summary]="bar.summary"
+		 [y]="bar.y"></app-bar>

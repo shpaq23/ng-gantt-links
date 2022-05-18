@@ -5,7 +5,8 @@ import { Point } from 'src/app/links/model/Point';
 
 interface BarInterface {
 	summary: string,
-	y: number
+	y: number,
+	id: number
 }
 
 @Component({
@@ -72,7 +73,8 @@ export class TestingViewComponent implements OnInit {
 		for (let i = 0; i < 10; i++) {
 			const bar: BarInterface = {
 				summary: `Bar Summary ${i}`,
-				y: i * 40
+				y: i * 40,
+				id: i + 1
 			};
 			this.bars.push(bar);
 		}

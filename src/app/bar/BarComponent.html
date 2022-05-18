@@ -1,7 +1,18 @@
-<div class="bar__endpoint bar__endpoint--left"></div>
-<div class="bar__endpoint bar__endpoint--right"></div>
+<div linkDrag
+	 [linkDragData]="linkDragStartData"
+	 class="bar__endpoint bar__endpoint--left"></div>
+<div linkDrag
+	 [linkDragData]="linkDragEndData"
+	 class="bar__endpoint bar__endpoint--right"></div>
 
 <div #wrapper class="bar__wrapper">
+	<div linkDrop
+		 [linkDropData]="linkDragStartData"
+		 class="bar__drop-area bar__drop-area--left"></div>
+	<div linkDrop
+		 [linkDropData]="linkDragEndData"
+		 class="bar__drop-area bar__drop-area--right"></div>
+
 	<p>
 		{{ summary }}
 	</p>

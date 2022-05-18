@@ -1,6 +1,7 @@
 import { ApplicationRef, ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { filter } from 'rxjs/operators';
 import { Event, NavigationEnd, Router } from '@angular/router';
+import { filter } from 'rxjs/operators';
+import { LinkDragService } from 'src/app/link-dnd/LinkDragService';
 
 @Component({
 	selector: 'app-root',
@@ -21,11 +22,13 @@ export class AppComponent implements OnInit {
 
 	constructor(
 		private readonly router: Router,
-		private readonly applicationRef: ApplicationRef
+		private readonly applicationRef: ApplicationRef,
+		private readonly linkDragService: LinkDragService<number>
 	) {
 	}
 
 	ngOnInit() {
+		this.observeLinkDragData();
 		this.router.events.pipe(
 			filter((event: Event) => {
 				return event instanceof NavigationEnd;
@@ -33,6 +36,16 @@ export class AppComponent implements OnInit {
 		).subscribe(() => {
 			this.applicationRef.tick();
 		});
+	}
+
+	private observeLinkDragData(): void {
+		this.linkDragService.selectDragData()
+			.pipe(
+				// this.takeUntilDestroy()
+			)
+			.subscribe(([startData, endData]) => {
+				console.log(startData, endData);
+			});
 	}
 
 }

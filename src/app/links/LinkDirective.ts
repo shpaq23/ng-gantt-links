@@ -1,6 +1,11 @@
 import { Directive, ElementRef, Input, OnChanges, Renderer2, SimpleChanges } from '@angular/core';
 import { Link } from 'src/app/links/model/Link';
-import { LinkType } from 'src/app/links/model/LinkType';
+import { LinkTypeKey } from 'src/app/links/model/LinkType';
+import { Point } from 'src/app/links/model/Point';
+import { calcEE } from 'src/app/links/calculations/ee';
+import { calcSE } from 'src/app/links/calculations/se';
+import { calcSS } from 'src/app/links/calculations/ss';
+import { calcES } from 'src/app/links/calculations/es';
 
 @Directive({
 	selector: 'polyline[appLink]'
@@ -26,62 +31,31 @@ export class LinkDirective implements OnChanges {
 	}
 
 	private calculatePoints(): string {
-		const start: Point = [this.link.getStart().x, this.link.getStart().y];
-		const end: Point = [this.link.getEnd().x, this.link.getEnd().y];
+		let points: Point[] = [];
 
-		const points: Point[] = [start];
+		switch (this.link.getType().key) {
+			case LinkTypeKey.EE:
+				points = calcEE(this.link);
+				break;
 
-		if(this.link.getType().isSameType(LinkType.EE)) {
-			// po prawej
-			const maxX = Math.max(start[0] + this.link.xMargin, end[0] + this.link.xMargin)
-			points.push([maxX, start[1]], [maxX, end[1]]);
-		} else if (this.link.getType().isSameType(LinkType.SS)) {
-			// po lewej
-			const minX = Math.min(start[0] - this.link.xMargin, end[0] - this.link.xMargin)
-			points.push([minX, start[1]], [minX, end[1]]);
-		} else if (
-			(this.link.getType().isSameType(LinkType.SE) && start[0] - this.link.xMargin < end[0] + this.link.xMargin) ||
-			(this.link.getType().isSameType(LinkType.ES) && start[0] + this.link.xMargin > end[0] - this.link.xMargin)
-		) {
-			// zawijas
-			const startHigher = start[1] < end[1];
-			const [startMargin, endMargin]: [Point, Point] = this.link.getType().isSameType(LinkType.SE)
-				? [[start[0] - this.link.xMargin, start[1]], [end[0] + this.link.xMargin, end[1]]]
-				: [[start[0] + this.link.xMargin, start[1]], [end[0] - this.link.xMargin, end[1]]]
+			case LinkTypeKey.SS:
+				points = calcSS(this.link);
+				break;
 
-			points.push(startMargin);
+			case LinkTypeKey.SE:
+				points = calcSE(this.link);
+				break;
 
-			if(startHigher) {
-				points.push(
-					[startMargin[0], startMargin[1] + this.link.yMargin],
-					[endMargin[0], startMargin[1] + this.link.yMargin]
-				)
-			} else {
-				points.push(
-					[startMargin[0], endMargin[1] + this.link.yMargin],
-					[endMargin[0], endMargin[1] + this.link.yMargin]
-				)
-			}
-
-			points.push(endMargin);
-		} else {
-			// mid point
-			const xMidPoint = (start[0] + end[0]) / 2;
-
-			points.push(
-				[xMidPoint, start[1]],
-				[xMidPoint, end[1]]
-			)
+			case LinkTypeKey.ES:
+				points = calcES(this.link);
+				break;
 		}
 
-
-		points.push(end);
 		return this.pointsToAttribute(points);
 	}
 
 	private pointsToAttribute(points: Point[]): string {
-		return points.map(point => point.join(',')).join(' ')
+		return points.map(point => `${point.x},${point.y}`).join(' ')
 	}
 }
 
-type Point = [number, number];

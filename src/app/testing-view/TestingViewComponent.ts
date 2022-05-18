@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, ElementRef, OnInit, Renderer2 } from '@angular/core';
 import { Link } from 'src/app/links/model/Link';
 import { LinkType } from 'src/app/links/model/LinkType';
-import { LinkEndpoint } from 'src/app/links/model/LinkEndpoint';
+import { Point } from 'src/app/links/model/Point';
 
 interface BarInterface {
 	summary: string,
@@ -52,12 +52,12 @@ export class TestingViewComponent implements OnInit {
 	private generateLinks(): void {
 		const generationStart = performance.now();
 		for (let i = 1; i < this.numberOfLinks; i++) {
-			const startEndpoint: LinkEndpoint = {
+			const startEndpoint: Point = {
 				x: 200,
 				y: i * 20
 			};
 
-			const endEndpoint: LinkEndpoint = {
+			const endEndpoint: Point = {
 				x: 200,
 				y: i * 20 + 40
 			};

@@ -12,6 +12,7 @@ export class Link {
 		private readonly barHeight: number,
 		public readonly xMargin: number = 20,
 		private readonly yMargin: number = 10,
+		public readonly curveStrength = 10,
 	) {
 		this.yWrapDistance = barHeight / 2 + yMargin
 	}

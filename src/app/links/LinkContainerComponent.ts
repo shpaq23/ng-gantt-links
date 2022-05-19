@@ -103,11 +103,10 @@ export class LinkContainerComponent implements OnInit, AfterViewInit {
 				const y = event.clientY - this.offsetPointY;
 				const lastLineY = y > this.startPointY ? y - LinkContainerComponent.MOUSE_OFFSET : y + LinkContainerComponent.MOUSE_OFFSET;
 
-				const path = new SvgPathBuilder()
-					.moveTo({x: this.startPointX, y: this.startPointY})
-					.lineWithBezierQuadraticCurves(
+				const path = new SvgPathBuilder({x: this.startPointX, y: this.startPointY})
+					.polylineWithQuadraticBezierCorners(
+						{x: this.startPointX, y: this.startPointY},
 						[
-								{x: this.startPointX, y: this.startPointY},
 								{x: x, y: this.startPointY},
 								{x: x, y: lastLineY}
 						],

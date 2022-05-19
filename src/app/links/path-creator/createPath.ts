@@ -5,13 +5,13 @@ import { calculatePoints } from 'src/app/links/path-creator/link-points/calculat
 export function createPath(link: Link): string {
 	const points = calculatePoints(link);
 
-	const svgPath = new SvgPathBuilder();
-	svgPath.moveTo(points[0]);
+	const [firstPoint, ...restPoints] = points;
+	const svgPath = new SvgPathBuilder(firstPoint);
 
 	if(!link.curveStrength) {
-		svgPath.polyLine(points);
+		svgPath.polyLine(restPoints);
 	} else {
-		svgPath.lineWithBezierQuadraticCurves(points, link.curveStrength);
+		svgPath.polylineWithQuadraticBezierCorners(firstPoint, points, link.curveStrength);
 	}
 
 	return svgPath.build();

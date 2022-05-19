@@ -3,6 +3,10 @@ import { Point } from 'src/app/links/model/Point';
 export class SvgPathBuilder {
 	private svgPathCommands: SvgPathCommand[] = [];
 
+	constructor(startPoint: Point) {
+		this.moveTo(startPoint);
+	}
+
 	moveTo(point: Point) {
 		this.svgPathCommands.push(
 			new SvgPathCommand('M', point.x, point.y)
@@ -33,15 +37,16 @@ export class SvgPathBuilder {
 		return this;
 	}
 
-	lineWithBezierQuadraticCurves(points: Point[], maxCurveStrength: number) {
-		if(points.length < 3) return this.polyLine(points);
+	polylineWithQuadraticBezierCorners(previousPoint: Point, points: Point[], maxCurveStrength: number) {
+		const pointsWithPrevious = [previousPoint, ...points]
+		if(pointsWithPrevious.length < 3) return this.polyLine(pointsWithPrevious);
 
-		for (let i = 0; i < points.length - 2; i++) {
-			const middleToFirstVector = new Vector2D(points[i + 1], points[i]);
-			const middleToThirdVector = new Vector2D(points[i + 1], points[i + 2])
+		for (let i = 0; i < pointsWithPrevious.length - 2; i++) {
+			const middleToFirstVector = new Vector2D(pointsWithPrevious[i + 1], pointsWithPrevious[i]);
+			const middleToThirdVector = new Vector2D(pointsWithPrevious[i + 1], pointsWithPrevious[i + 2])
 
 			if (middleToFirstVector.isParallelTo(middleToThirdVector)) {
-				this.lineTo(points[i + 1]);
+				this.lineTo(pointsWithPrevious[i + 1]);
 			} else {
 				const curveStrength = Math.min(
 					middleToFirstVector.length / 2,
@@ -53,21 +58,21 @@ export class SvgPathBuilder {
 				const middleToThirdUnitVector = middleToThirdVector.unit();
 
 				const pointBeforeBend = {
-					x: points[i + 1].x + middleToFirstUnitVector.x * curveStrength,
-					y: points[i + 1].y + middleToFirstUnitVector.y * curveStrength
+					x: pointsWithPrevious[i + 1].x + middleToFirstUnitVector.x * curveStrength,
+					y: pointsWithPrevious[i + 1].y + middleToFirstUnitVector.y * curveStrength
 				}
 				this.lineTo(pointBeforeBend);
 
 				const pointAfterBend = {
-					x: points[i + 1].x + middleToThirdUnitVector.x * curveStrength,
-					y: points[i + 1].y + middleToThirdUnitVector.y * curveStrength
+					x: pointsWithPrevious[i + 1].x + middleToThirdUnitVector.x * curveStrength,
+					y: pointsWithPrevious[i + 1].y + middleToThirdUnitVector.y * curveStrength
 				}
 
-				this.bezierQuadratic(points[i+1], pointAfterBend);
+				this.bezierQuadratic(pointsWithPrevious[i+1], pointAfterBend);
 			}
 		}
 
-		this.lineTo(points[points.length - 1]);
+		this.lineTo(pointsWithPrevious[pointsWithPrevious.length - 1]);
 
 		return this;
 	}

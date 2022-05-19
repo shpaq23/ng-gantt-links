@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg">
+	<marker id="endarrow"
+			markerWidth="3"
+			markerHeight="3"
+			refX="1.5"
+			refY="1.5"
+			orient="auto"
+			markerUnits="strokeWidth">
+		<polygon points="0 0, 3 1.5, 0 3" fill="#6B778C"/>
+	</marker>
+
+	<path *ngFor="let link of links; trackBy: trackByFn;"
+		  [link]="link"
+		  appLink
+		  stroke="#6B778C"
+		  stroke-width="4"
+		  marker-end="url(#endarrow)"
+		  fill="none"></path>
+
+	<polyline #dragLineElement
+			  *ngIf="isDragging"
+			  stroke-width="4"
+			  stroke-linejoin="round"
+			  stroke-linecap="round"
+			  stroke="#6B778C"
+			  marker-end="url(#endarrow)"
+			  fill="none"></polyline>
+</svg>

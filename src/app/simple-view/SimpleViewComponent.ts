@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Link } from 'src/app/links/model/Link';
 import { LinkAnchor, LinkType } from 'src/app/links/model/LinkType';
 import { Point } from 'src/app/links/model/Point';
@@ -17,7 +17,10 @@ import { Point } from 'src/app/links/model/Point';
 	`],
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SimpleViewComponent implements OnInit {
+export class SimpleViewComponent implements OnInit, AfterViewInit {
+
+	@ViewChild('linkContainerComponent', { read: ElementRef })
+	linkContainerComponent: ElementRef;
 
 	@ViewChild('bar1', { static: true, read: ElementRef })
 	bar1ElementRef: ElementRef;
@@ -55,12 +58,20 @@ export class SimpleViewComponent implements OnInit {
 	bar7DomRect: DOMRect;
 	bar8DomRect: DOMRect;
 
+	private offsetPointX: number;
+	private offsetPointY: number;
+
 	constructor(
 		private readonly changeDetectorRef: ChangeDetectorRef
 	) {
 	}
 
 	ngOnInit() {
+	}
+
+	ngAfterViewInit(): void {
+		this.setHostOffsetPoints();
+
 		setTimeout(() => {
 			this.bar1DomRect = this.bar1ElementRef.nativeElement.getBoundingClientRect();
 			this.bar2DomRect = this.bar2ElementRef.nativeElement.getBoundingClientRect();
@@ -134,14 +145,20 @@ export class SimpleViewComponent implements OnInit {
 
 	private createLink(bar1: DOMRect, bar2: DOMRect, type: LinkType, id: number): Link {
 		const linkStart: Point = {
-			x: (type.start === LinkAnchor.START) ? bar1.x : bar1.x + bar1.width,
-			y: bar1.y - bar1.height / 2
+			x: ((type.start === LinkAnchor.START) ? bar1.x : bar1.x + bar1.width) - this.offsetPointX,
+			y: (bar1.y + bar1.height / 2) - this.offsetPointY
 		};
 		const linkEnd: Point = {
-			x: (type.end === LinkAnchor.END) ? bar2.x + bar2.width : bar2.x,
-			y: bar2.y - bar2.height / 2
+			x: ((type.end === LinkAnchor.END) ? bar2.x + bar2.width : bar2.x) - this.offsetPointX,
+			y: (bar2.y + bar2.height / 2) - this.offsetPointY
 		};
 		return new Link(id, type, linkStart, linkEnd, bar1.height);
 	}
 
+	private setHostOffsetPoints(): void {
+		const hostClientRect = (this.linkContainerComponent.nativeElement as HTMLElement).getBoundingClientRect();
+
+		this.offsetPointX = hostClientRect.x;
+		this.offsetPointY = hostClientRect.y;
+	}
 }

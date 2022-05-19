@@ -45,6 +45,7 @@ export class LinkDragEndDirective implements OnChanges, OnInit {
 		this.service.selectDragging()
 			.pipe(
 				takeUntil(this.destroyEvents$)
+				// this.takeUntilDestroy()
 			)
 			.subscribe((dragging: boolean) => {
 				if (dragging) {
@@ -60,6 +61,7 @@ export class LinkDragEndDirective implements OnChanges, OnInit {
 			.pipe(
 				takeUntil(this.destroyMouseUpEvent$),
 				takeUntil(this.destroyEvents$)
+				// this.takeUntilDestroy()
 			)
 			.subscribe(() => {
 				this.service.endDrag(this.data);

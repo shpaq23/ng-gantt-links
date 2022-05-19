@@ -1,4 +1,4 @@
-<app-link-container [links]="links"></app-link-container>
+<app-link-container #linkContainerComponent [links]="links"></app-link-container>
 <div style="position: relative; height: 150px;">
 	<p>Link type: End-End</p>
 	<app-bar #bar1 (positionChanged)="onBar1PositionChanged($event)" [id]="1" summary="Bar 1 - EE" [y]="12"></app-bar>

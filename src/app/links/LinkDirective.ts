@@ -21,7 +21,6 @@ export class LinkDirective implements OnChanges {
 
 	private setPoints(): void {
 		this.renderer.setAttribute(this.elementRef.nativeElement, 'd', createPath(this.link));
-		this.renderer.setAttribute(this.elementRef.nativeElement, 'style', 'fill:white;stroke:red;stroke-width:4');
 	}
 }
 
